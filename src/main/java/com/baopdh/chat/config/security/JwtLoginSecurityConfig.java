@@ -1,4 +1,4 @@
-package com.baopdh.chat.config;
+package com.baopdh.chat.config.security;
 
 import com.baopdh.chat.filter.JwtAuthenticationFilter;
 import com.baopdh.chat.service.CustomUserDetailsService;

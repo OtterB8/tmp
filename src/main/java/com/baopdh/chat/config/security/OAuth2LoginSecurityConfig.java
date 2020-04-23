@@ -1,3 +1,5 @@
+package com.baopdh.chat.config.security;
+
 //package com.baopdh.chat.config;
 //
 //import org.springframework.beans.factory.annotation.Autowired;
