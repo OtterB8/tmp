@@ -10,6 +10,7 @@ import com.baopdh.chat.connectionpooling.connection.MessageConnection;
 import com.baopdh.chat.connectionpooling.connection.ProfileConnection;
 import com.baopdh.chat.connectionpooling.connection.RoomConnection;
 import com.baopdh.chat.connectionpooling.connection.TrackingConnection;
+import com.baopdh.chat.connectionpooling.connection.UserIdConnection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -65,6 +66,19 @@ public class CustomConnectionPoolConfig {
         customConectionPool.setPoolSize(20);
         if (!customConectionPool.initPool()) {
             System.err.println("Initialize trackingPool failed");
+        }
+        return customConectionPool;
+    }
+    
+    @Bean(name="userIdPool")
+    @Scope("singleton")
+    CustomConnectionPool userIdPool() {
+        CustomConnectionPool customConectionPool = new CustomConnectionPool(UserIdConnection.class);
+        customConectionPool.setHost("localhost");
+        customConectionPool.setPort("10005");
+        customConectionPool.setPoolSize(20);
+        if (!customConectionPool.initPool()) {
+            System.err.println("Initialize userIdPool failed");
         }
         return customConectionPool;
     }
