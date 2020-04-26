@@ -6,7 +6,10 @@
 package com.baopdh.chat.config.connectionpool;
 
 import com.baopdh.chat.connectionpooling.CustomConnectionPool;
-import com.baopdh.chat.connectionpooling.connection.UserProfile;
+import com.baopdh.chat.connectionpooling.connection.MessageConnection;
+import com.baopdh.chat.connectionpooling.connection.ProfileConnection;
+import com.baopdh.chat.connectionpooling.connection.RoomConnection;
+import com.baopdh.chat.connectionpooling.connection.TrackingConnection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -14,15 +17,54 @@ import org.springframework.context.annotation.Scope;
 @Configuration
 public class CustomConnectionPoolConfig {
     
-    @Bean(name="userProfilePool")
+    @Bean(name="profilePool")
     @Scope("singleton")
-    CustomConnectionPool userProfilePool() {
-        CustomConnectionPool customConectionPool = new CustomConnectionPool(UserProfile.class);
+    CustomConnectionPool profilePool() {
+        CustomConnectionPool customConectionPool = new CustomConnectionPool(ProfileConnection.class);
         customConectionPool.setHost("localhost");
-        customConectionPool.setPort("9090");
-        customConectionPool.setPoolSize(4);
+        customConectionPool.setPort("10001");
+        customConectionPool.setPoolSize(20);
         if (!customConectionPool.initPool()) {
-            System.err.println("Initialize userProfilePool failed");
+            System.err.println("Initialize profilePool failed");
+        }
+        return customConectionPool;
+    }
+    
+    @Bean(name="messagePool")
+    @Scope("singleton")
+    CustomConnectionPool messagePool() {
+        CustomConnectionPool customConectionPool = new CustomConnectionPool(MessageConnection.class);
+        customConectionPool.setHost("localhost");
+        customConectionPool.setPort("10002");
+        customConectionPool.setPoolSize(20);
+        if (!customConectionPool.initPool()) {
+            System.err.println("Initialize messagePool failed");
+        }
+        return customConectionPool;
+    }
+    
+    @Bean(name="roomPool")
+    @Scope("singleton")
+    CustomConnectionPool roomPool() {
+        CustomConnectionPool customConectionPool = new CustomConnectionPool(RoomConnection.class);
+        customConectionPool.setHost("localhost");
+        customConectionPool.setPort("10003");
+        customConectionPool.setPoolSize(20);
+        if (!customConectionPool.initPool()) {
+            System.err.println("Initialize roomPool failed");
+        }
+        return customConectionPool;
+    }
+    
+    @Bean(name="trackingPool")
+    @Scope("singleton")
+    CustomConnectionPool trackingPool() {
+        CustomConnectionPool customConectionPool = new CustomConnectionPool(TrackingConnection.class);
+        customConectionPool.setHost("localhost");
+        customConectionPool.setPort("10004");
+        customConectionPool.setPoolSize(20);
+        if (!customConectionPool.initPool()) {
+            System.err.println("Initialize trackingPool failed");
         }
         return customConectionPool;
     }

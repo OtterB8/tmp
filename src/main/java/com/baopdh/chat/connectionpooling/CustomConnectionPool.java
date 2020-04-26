@@ -6,13 +6,14 @@
 package com.baopdh.chat.connectionpooling;
 
 import com.baopdh.chat.connectionpooling.connection.Connection;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class CustomConnectionPool implements IConnectionPool {
     private String host;
     private String port;
-    private int poolSize;
-    private ConcurrentLinkedQueue<Connection> pool;
+    private BlockingQueue<Connection> pool;
     private final Class<? extends Connection> connectionClass;
     
     public CustomConnectionPool(Class<? extends Connection> connectionClass) {
@@ -31,8 +32,7 @@ public class CustomConnectionPool implements IConnectionPool {
 
     @Override
     public void setPoolSize(int poolSize) {
-        this.poolSize = poolSize;
-        this.pool = new ConcurrentLinkedQueue<>();
+        this.pool = new LinkedBlockingDeque<>(poolSize);
     }
     
     @Override
@@ -46,43 +46,40 @@ public class CustomConnectionPool implements IConnectionPool {
         
         //create new connection if there is none available
         try {
-            connection = this.connectionClass.newInstance();
+            connection = this.connectionClass.getDeclaredConstructor().newInstance();
             return connection.open(this.host, this.port) ? connection : null;
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
             return null;
         }
     }
 
     @Override
-    public synchronized boolean releaseConnection(Connection connection) {
+    public boolean releaseConnection(Connection connection) {
         if (this.pool == null || connection == null)
             return false;
 
-        // not thread-safe yet
-        if (this.pool.size() < this.poolSize) {
-            this.pool.add(connection);
-        }
-        
+        this.pool.offer(connection);
         return true;
     }
 
     @Override
     public boolean initPool() {
-        if (this.connectionClass == null && this.pool.size() > 0)
+        if (this.connectionClass == null || this.pool == null)
             return false;
         
-        for (int i = 0; i < poolSize; ++i) {
-            try {
-                Connection connection = this.connectionClass.newInstance();
+        try {
+            while (true) {
+                Connection connection = this.connectionClass.getDeclaredConstructor().newInstance();
                 if (!connection.open(this.host, this.port)) {
                     return false;
                 }
-                this.pool.add(connection);
-            } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
-                return false;
+                if (!this.pool.offer(connection))
+                    break;
             }
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+            return false;
         }
         
         return true;

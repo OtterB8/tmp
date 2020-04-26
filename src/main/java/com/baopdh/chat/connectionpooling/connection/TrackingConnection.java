@@ -5,8 +5,8 @@
  */
 package com.baopdh.chat.connectionpooling.connection;
 
-import com.baopdh.chat.thrift.gen.KVStoreService;
-import com.baopdh.chat.thrift.gen.User;
+import com.baopdh.thrift.gen.Tracking;
+import com.baopdh.thrift.gen.TrackingStoreService;
 import java.net.SocketException;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
@@ -17,11 +17,11 @@ import org.apache.thrift.transport.TTransport;
 
 /**
  *
- * @author cpu60019
+ * @author admin
  */
-public class UserProfile implements Connection<Integer, User> {
+public class TrackingConnection implements Connection<String, Tracking> {
     private TTransport transport;
-    private KVStoreService.Client client;
+    private TrackingStoreService.Client client;
     private String host;
     private String port;
 
@@ -35,7 +35,7 @@ public class UserProfile implements Connection<Integer, User> {
             transport.open();
 
             TProtocol protocol = new TBinaryProtocol(transport);
-            client = new KVStoreService.Client(protocol);
+            client = new TrackingStoreService.Client(protocol);
         } catch (TException e) {
             e.printStackTrace();
             return false;
@@ -54,7 +54,7 @@ public class UserProfile implements Connection<Integer, User> {
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(String id) {
         try {
             return client.remove(id);
         } catch (TException e) {
@@ -64,17 +64,17 @@ public class UserProfile implements Connection<Integer, User> {
     }
 
     @Override
-    public Integer getKey() {
+    public String getKey() {
         try {
             return client.getKey();
         } catch (TException e) {
             e.printStackTrace();
-            return -1;
+            return "NULL";
         }
     }
 
     @Override
-    public boolean put(Integer id, User user) {
+    public boolean put(String id, Tracking user) {
         try {
             return client.put(id, user);
         } catch (TException e) {
@@ -84,10 +84,10 @@ public class UserProfile implements Connection<Integer, User> {
     }
 
     @Override
-    public User get(Integer id) throws SocketException {
+    public Tracking get(String id) throws SocketException {
         try {
             return client.get(id);
-        } catch (Exception e) {
+        } catch (TException e) {
             System.out.println("Client: " + e.getMessage());
             if (!this.open(this.host, this.port)) {
                 throw new SocketException();
@@ -101,4 +101,3 @@ public class UserProfile implements Connection<Integer, User> {
             transport.close();
     }
 }
-

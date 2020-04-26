@@ -6,8 +6,8 @@
 package com.baopdh.chat.controller;
 
 import com.baopdh.chat.model.UserProfile;
-import com.baopdh.chat.repository.UserProfileRepository;
-import com.baopdh.chat.thrift.gen.User;
+import com.baopdh.chat.repository.ProfileRepository;
+import com.baopdh.thrift.gen.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @author cpu60019
  */
 @RestController
-public class UserProfileController {
+public class ProfileController {
     @Autowired
-    private UserProfileRepository userProfileRepository;
+    private ProfileRepository userProfileRepository;
     
     @PostMapping("/user")
     @ResponseBody

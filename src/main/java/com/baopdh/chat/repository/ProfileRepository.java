@@ -6,8 +6,8 @@
 package com.baopdh.chat.repository;
 
 import com.baopdh.chat.connectionpooling.CustomConnectionPool;
-import com.baopdh.chat.connectionpooling.connection.UserProfile;
-import com.baopdh.chat.thrift.gen.User;
+import com.baopdh.chat.connectionpooling.connection.ProfileConnection;
+import com.baopdh.thrift.gen.User;
 import java.net.SocketException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,13 +18,13 @@ import org.springframework.stereotype.Repository;
  * @author cpu60019
  */
 @Repository
-public class UserProfileRepository {
+public class ProfileRepository {
     @Autowired
-    @Qualifier("userProfilePool")
+    @Qualifier("profilePool")
     private CustomConnectionPool connectionPool;
     
     public boolean saveUser(int key, User value) {
-        UserProfile userProfile = (UserProfile) connectionPool.getConnection();
+        ProfileConnection userProfile = (ProfileConnection) connectionPool.getConnection();
         try {
             if (userProfile == null)
                 return false;
@@ -35,17 +35,17 @@ public class UserProfileRepository {
     }
     
     public User getUser(int key) {
-        UserProfile userProfile = (UserProfile) connectionPool.getConnection();
+        ProfileConnection profileConnection = (ProfileConnection) connectionPool.getConnection();
         User user = null;
+        
         try {
-            if (userProfile != null)
-                user = userProfile.get(key);
+            if (profileConnection != null)
+                user = profileConnection.get(key);
         } catch(SocketException exception) {
             exception.printStackTrace();
-            return null;
         }
         
-        connectionPool.releaseConnection(userProfile);
+        connectionPool.releaseConnection(profileConnection);
         
         return user;
     }

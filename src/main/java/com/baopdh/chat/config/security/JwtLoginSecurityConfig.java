@@ -1,9 +1,10 @@
 package com.baopdh.chat.config.security;
 
-import com.baopdh.chat.filter.JwtAuthenticationFilter;
+import com.baopdh.chat.filter.security.JwtAuthenticationFilter;
 import com.baopdh.chat.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
+@Configuration
 @EnableWebSecurity
 public class JwtLoginSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
