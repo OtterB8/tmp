@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,7 +22,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (id == -1)
             throw new UsernameNotFoundException("User not found");
         
-        com.baopdh.thrift.gen.User user = profileRepository.getUser(id);    
+        com.baopdh.thrift.gen.User user = profileRepository.getUser(id);
+        if (user == null)
+            throw new UsernameNotFoundException("User not found");
         
         return User.withUsername(username)
                 .password(user.getPassword())
