@@ -1,10 +1,12 @@
 import React from 'react';
-import {Header} from '../components';
+import {Header} from '@/components';
+import './index.less';
 
 export default (props: any) => {
-    return <div>
+    return <div className='layout'>
         <Header/>
-        <h1>Layout</h1>
-        {props.children}
+        <div className='layout-children'>
+            {props.children}
+        </div>
     </div>
 }

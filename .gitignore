@@ -31,7 +31,7 @@ build/
 .vscode/
 
 ### run time and thrift gen
-database/
+databases/*/database/
 gen-java/
 
 ### Front end

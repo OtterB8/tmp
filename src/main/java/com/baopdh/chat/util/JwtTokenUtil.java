@@ -2,6 +2,7 @@ package com.baopdh.chat.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -46,7 +47,13 @@ public class JwtTokenUtil {
     }
 
     public boolean validateToken(String token) {
-        return !isTokenExpired(token);
+        boolean isValid = false;
+        
+        try {
+            isValid = !isTokenExpired(token);
+        } catch (MalformedJwtException e) {}
+        
+        return isValid;
     }
 
     private Boolean isTokenExpired(String token) {

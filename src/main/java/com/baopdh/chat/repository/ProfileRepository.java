@@ -23,14 +23,36 @@ public class ProfileRepository {
     @Qualifier("profilePool")
     private CustomConnectionPool connectionPool;
     
-    public boolean saveUser(int key, User value) {
-        ProfileConnection userProfile = (ProfileConnection) connectionPool.getConnection();
+    public int getKey() {
+        ProfileConnection profileConnection = (ProfileConnection) connectionPool.getConnection();
         try {
-            if (userProfile == null)
-                return false;
-            return userProfile.put(key, value);
+            if (profileConnection == null)
+                return -1;
+            return profileConnection.getKey();
         } finally {
-            connectionPool.releaseConnection(userProfile);
+            connectionPool.releaseConnection(profileConnection);
+        }
+    }
+    
+    public boolean saveUser(int key, User value) {
+        ProfileConnection profileConnection = (ProfileConnection) connectionPool.getConnection();
+        try {
+            if (profileConnection == null)
+                return false;
+            return profileConnection.put(key, value);
+        } finally {
+            connectionPool.releaseConnection(profileConnection);
+        }
+    }
+    
+    public boolean removeUser(int key) {
+        ProfileConnection profileConnection = (ProfileConnection) connectionPool.getConnection();
+        try {
+            if (profileConnection == null)
+                return false;
+            return profileConnection.delete(key);
+        } finally {
+            connectionPool.releaseConnection(profileConnection);
         }
     }
     

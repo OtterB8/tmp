@@ -16,6 +16,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -39,18 +41,30 @@ public class JwtLoginSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+            .cors().and()
             .csrf().disable()
             .sessionManagement(sessionManagement -> sessionManagement
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .addFilterBefore(jwtAuthenticationFilter, AnonymousAuthenticationFilter.class)
             .authorizeRequests(authorize -> authorize
-                .antMatchers("/login").anonymous()
+                .antMatchers("/login", "/signup").anonymous()
                 .antMatchers("/hello").authenticated()
                 .anyRequest().permitAll()
             )
             .exceptionHandling(exceptionHandling -> exceptionHandling
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
             );
+    }
+    
+    @Bean
+    public WebMvcConfigurer corsConfigurer() 
+    {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**").allowedOrigins("http://localhost:8000");
+            }
+        };
     }
 }

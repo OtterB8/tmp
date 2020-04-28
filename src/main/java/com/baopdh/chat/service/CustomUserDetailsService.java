@@ -19,15 +19,18 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         int id = userIdRepository.getId(username);
-        if (id == -1)
+        if (id == -1) {
             throw new UsernameNotFoundException("User not found");
+        }
         
         com.baopdh.thrift.gen.User user = profileRepository.getUser(id);
-        if (user == null)
+        if (user == null) {
             throw new UsernameNotFoundException("User not found");
+        }        
         
         return User.withUsername(username)
                 .password(user.getPassword())
+                .roles("USER")
                 .build();
     }
 }

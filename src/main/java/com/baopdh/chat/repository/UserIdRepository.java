@@ -6,6 +6,7 @@
 package com.baopdh.chat.repository;
 
 import com.baopdh.chat.connectionpooling.CustomConnectionPool;
+import com.baopdh.chat.connectionpooling.connection.ProfileConnection;
 import com.baopdh.chat.connectionpooling.connection.UserIdConnection;
 import com.baopdh.thrift.gen.UserIdentity;
 import java.net.SocketException;
@@ -36,6 +37,17 @@ public class UserIdRepository {
         
         connectionPool.releaseConnection(userIdConnection);
         
-        return userIdentity == null ? -1 : 0;
+        return userIdentity == null ? -1 : userIdentity.getKey();
+    }
+    
+    public boolean saveUserId(String username, int id) {
+        UserIdConnection userIdConnection = (UserIdConnection) connectionPool.getConnection();
+        try {
+            if (userIdConnection == null)
+                return false;
+            return userIdConnection.put(username, new UserIdentity(id));
+        } finally {
+            connectionPool.releaseConnection(userIdConnection);
+        }
     }
 }

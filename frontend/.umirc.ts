@@ -14,7 +14,7 @@ export default defineConfig({
         { path: '/signin', component: 'SignIn', exact: true},
         { path: '/signup', component: 'SignUp', exact: true},
       ],
-      wrappers: ['@/wrappers/auth.tsx'],
+      wrappers: ['@/wrappers/AuthWrapper.tsx']
     },
   ],
 });

@@ -11,7 +11,7 @@
     <groupId>com.baopdh</groupId>
     <artifactId>chat</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>simple-chat-app</name>
+    <name>Chat App</name>
     <description>Simple chat app</description>
 
     <properties>

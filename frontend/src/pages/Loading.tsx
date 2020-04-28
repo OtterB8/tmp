@@ -1,7 +1,9 @@
 import React from 'react';
+import {LoadingOutlined} from '@ant-design/icons';
+import './Loading.less';
 
-export default (props: any) => {
-    return <div>
-        Loading
+export default () => {
+    return <div className='loading-page'>
+        <LoadingOutlined />
     </div>
 }
