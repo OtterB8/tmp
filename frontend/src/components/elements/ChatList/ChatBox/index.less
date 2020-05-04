@@ -1,0 +1,26 @@
+@import '../../../../assets/style/color.less';
+
+.chatbox {
+  border-bottom: 1px solid black;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  &.chosen {
+    background-color: @chosen-color;
+  }
+
+  .display-box {
+    padding-left: 16px;
+    width: calc(100% - 32px);
+
+    p {
+      margin: 0;
+      word-wrap: break-word;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

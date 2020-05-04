@@ -69,7 +69,7 @@ public class RoomConnection implements Connection<String, Room> {
             return client.getKey();
         } catch (TException e) {
             e.printStackTrace();
-            return "NULL";
+            return null;
         }
     }
 

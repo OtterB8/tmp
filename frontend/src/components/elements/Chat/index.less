@@ -1,4 +1,53 @@
+@import '../../../assets/style/color.less';
+@import '../../../assets/style/size.less';
 
-.title {
-  background: rgb(121, 164, 242);
+.chat {
+  height: @view-height;
+  background-color: @theme-color;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  display: flex;
+  flex-direction: column;
+
+  .partner {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid black;
+    background-color: springgreen;
+    padding: 0 16px;
+    margin-bottom: 5px;
+
+    .display-info {
+      margin-left: 16px;
+
+      p {
+        margin: 0;
+      }
+    }
+  }
+
+  .messages {
+    flex: 1 0 auto;
+    overflow-y: auto;
+    height: 0;
+    padding: 0 20px;
+  }
+
+  .texting {
+    flex: 0 0 auto;
+    background-color: darkseagreen;
+    padding: 4px;
+
+    .ant-form {
+      display: flex;
+
+      .ant-form-item {
+        margin: 0;
+
+        &:first-child {
+          flex-grow: 1;
+        }
+      }
+    }
+  }
 }

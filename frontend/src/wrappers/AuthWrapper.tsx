@@ -1,23 +1,41 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Loading from '@/pages/Loading.tsx';
 import { connect, AuthModelState, history } from 'umi';
-import {getToken, setToken, removeToken} from '@/utils/token';
+import { getToken } from '@/utils/token';
+import {actionAuthRequest} from '@/models/actions/auth';
 
-const AuthWrapper = (props: any) => {
-    // if (props.auth === null) {
-    //     console.log('zz hehe')
-    //     if (getToken() !== null) {
-    //         // get user here
+const AuthWrapper = ({info, login, children, getAuthInfo}: any) => {
+    useEffect(() => {
+        const pathname = history.location.pathname;
 
-    //     } else {
-    //         history.push('/signin');
-    //     }
-    //     return <Loading />;
-    // }
-    
-    return <React.Fragment>{props.children}</React.Fragment>
+        if (info === null) { // if user info is null
+            if (getToken() !== null) { // if token exists
+                getAuthInfo(); // get user
+            } else {
+                if (pathname !== '/signin' && pathname !== '/signup') {
+                    history.push('/signin');
+                }
+            }
+        } else { // if user info exists go to chat room
+            if (pathname !== '/chatroom')
+                history.push('/chatroom');
+        }
+    }, [info, login, history.location.pathname]);
+
+    if (info === null && getToken() !== null) {
+        return <Loading />;
+    }
+
+    return <React.Fragment>{children}</React.Fragment>
 }
 
-export default connect(({auth}: {auth: AuthModelState}) => ({
-    auth
-}))(AuthWrapper);
+const mapStateToProps = ({auth}: {auth: AuthModelState}) => ({
+    info: auth.info,
+    login: auth.login
+});
+
+const mapDispatchToProps = (dispatch: Function) => ({
+    getAuthInfo: () => dispatch(actionAuthRequest())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthWrapper);

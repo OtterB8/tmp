@@ -1,4 +1,4 @@
-import { defineConfig } from 'umi';
+import { defineConfig, history } from 'umi';
 
 export default defineConfig({
   layout:false,
@@ -10,7 +10,7 @@ export default defineConfig({
       path: '/',
       component: '@/layouts',
       routes: [
-        { path: '/chatroom', component: 'ChatRoom', exact: true},
+        { path: '/chatroom', component: 'ChatRoom'},
         { path: '/signin', component: 'SignIn', exact: true},
         { path: '/signup', component: 'SignUp', exact: true},
       ],

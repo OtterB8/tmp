@@ -1,0 +1,23 @@
+@import '../../../../assets/style/color.less';
+
+.users {
+  .user {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid black;
+    margin-bottom: 16px;
+
+    &.chosen {
+      background-color: @chosen-color;
+    }
+
+    .display-info {
+      margin-left: 8px;
+
+      p {
+        margin: 0;
+      }
+    }
+  }
+}

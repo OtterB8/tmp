@@ -1,8 +1,16 @@
+@import '../../../assets/style/color.less';
 
 .header {
   display: flex;
   justify-content: space-between;
-  background-color: hotpink;
+  background-color: @main-color;
+  border-bottom: 1px solid black;
+
+  .icon {
+    .ant-avatar {
+      background-color: black;
+    }
+  }
 
   .user {
     display: flex;
@@ -10,9 +18,27 @@
     .user-name {
       display: flex;
       align-items: center;
+      font-weight: bold;
+      font-size: 24px;
+      margin-right: 4px;
       p {
         margin: 0;
+        color: black;
       }
+    }
+
+    .user-avatar {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      margin-left: 4px;
+    }
+
+    .logout {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      margin-left: 4px;
     }
   }
 }

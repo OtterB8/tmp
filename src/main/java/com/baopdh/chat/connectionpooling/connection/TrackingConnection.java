@@ -69,7 +69,7 @@ public class TrackingConnection implements Connection<String, Tracking> {
             return client.getKey();
         } catch (TException e) {
             e.printStackTrace();
-            return "NULL";
+            return null;
         }
     }
 

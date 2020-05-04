@@ -1,5 +1,6 @@
 package com.baopdh.chat.config.security;
 
+import com.baopdh.chat.constants.FrontendHost;
 import com.baopdh.chat.filter.security.JwtAuthenticationFilter;
 import com.baopdh.chat.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class JwtLoginSecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilterBefore(jwtAuthenticationFilter, AnonymousAuthenticationFilter.class)
             .authorizeRequests(authorize -> authorize
                 .antMatchers("/login", "/signup").anonymous()
-                .antMatchers("/hello").authenticated()
+                .antMatchers("/user", "/users", "/messages").authenticated()
                 .anyRequest().permitAll()
             )
             .exceptionHandling(exceptionHandling -> exceptionHandling
@@ -63,7 +64,8 @@ public class JwtLoginSecurityConfig extends WebSecurityConfigurerAdapter {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:8000");
+                registry.addMapping("/**")
+                        .allowedOrigins(FrontendHost.ORIGIN);
             }
         };
     }

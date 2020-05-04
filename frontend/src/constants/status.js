@@ -1,0 +1,13 @@
+export const CHATROOM_STATUS = {
+    CONNECTING: 'CONNECTING',
+    CONNECTED: 'CONNECTED',
+    ERROR: 'ERROR',
+    RECONNECTING: 'RECONNECTING'
+};
+
+export const CHAT_STATUS = {
+    VOID: 'VOID',
+    GETTING: 'GETTING',
+    ERROR: 'ERROR',
+    SUCCESS: 'SUCCESS'
+};

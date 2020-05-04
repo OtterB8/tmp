@@ -10,11 +10,20 @@ package com.baopdh.chat.model;
  * @author cpu60019
  */
 public class UserProfile {
+    private int id;
     private String name;
     private String email;
     private String phone;
     private String avatar;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public String getAvatar() {
         return avatar;
     }

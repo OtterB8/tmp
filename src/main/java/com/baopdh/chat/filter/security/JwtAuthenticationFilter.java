@@ -1,5 +1,6 @@
 package com.baopdh.chat.filter.security;
 
+import com.baopdh.chat.model.CustomPrincipal;
 import com.baopdh.chat.service.CustomUserDetailsService;
 import com.baopdh.chat.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import org.springframework.security.core.userdetails.User;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
@@ -31,10 +31,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(jwt) && jwtTokenUtil.validateToken(jwt)) {
             String username = jwtTokenUtil.getUsernameFromToken(jwt);
+            int id = jwtTokenUtil.getIdFromToken(jwt);
             try {
-                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+                CustomPrincipal customPrincipal = new CustomPrincipal(User.withUsername(username)
+                        .password("")
+                        .roles("USER")
+                        .build());
+                customPrincipal.setId(id);
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(customPrincipal, null, customPrincipal.getAuthorities());
 
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
                 context.setAuthentication(authentication);

@@ -1,7 +1,6 @@
 package com.baopdh.chat.service;
 
-import com.baopdh.chat.repository.ProfileRepository;
-import com.baopdh.chat.repository.UserIdRepository;
+import com.baopdh.chat.model.CustomPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,25 +11,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
-    private ProfileRepository profileRepository;
+    private ProfileService profileService;
     @Autowired
-    private UserIdRepository userIdRepository;
+    private UserIdService userIdService;
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        int id = userIdRepository.getId(username);
+        int id = userIdService.getUserId(username);
         if (id == -1) {
             throw new UsernameNotFoundException("User not found");
         }
         
-        com.baopdh.thrift.gen.User user = profileRepository.getUser(id);
+        com.baopdh.thrift.gen.User user = profileService.getUser(id);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }        
         
-        return User.withUsername(username)
+        CustomPrincipal customPrincipal = new CustomPrincipal(User.withUsername(username)
                 .password(user.getPassword())
                 .roles("USER")
-                .build();
+                .build());
+        customPrincipal.setId(id);
+        
+        return customPrincipal;
     }
 }

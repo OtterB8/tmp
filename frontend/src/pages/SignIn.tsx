@@ -1,21 +1,13 @@
 import React from 'react';
+import './SignIn.less';
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import authService from '@/services/authService';
-import {setToken} from '@/utils/token';
-import {Link, history} from 'umi';
-import './SignIn.less';
+import { Link,connect } from 'umi';
+import { actionSigninRequest } from '@/models/actions/auth';
 
-export default (props: any) => {
+const SignIn = ({signin}: any) => {
     const onFinish = async (values: any) => {
-        const res = await authService.signin(values);
-        if (res.status === 200) {
-            alert("Sign in success!");
-            setToken(res.data.accessToken);
-            history.push('/chatroom');
-        } else {
-            alert("Sign in failed!");
-        }
+        signin(values);
     };
 
     return <div className="signin">
@@ -36,3 +28,9 @@ export default (props: any) => {
         <p>Don't have an account? <Link to='/signup'>Sign Up</Link></p>
     </div>
 }
+
+const mapDispatchToProps = (dispatch: Function) => ({
+    signin: (credentials: any) => dispatch(actionSigninRequest(credentials))
+});
+
+export default connect(null, mapDispatchToProps)(SignIn);

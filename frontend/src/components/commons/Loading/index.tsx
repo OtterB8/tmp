@@ -1,10 +1,11 @@
 import React from 'react';
-import styles from './index.less';
+import './index.less';
+import {LoadingOutlined} from '@ant-design/icons';
 
-export default () => {
+export default ({size}: any) => {
   return (
-    <div>
-      <h1 className={styles.title}>Loading</h1>
+    <div className='loading'>
+      <LoadingOutlined style={{fontSize: size || 64}}/>
     </div>
   );
 }

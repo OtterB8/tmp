@@ -65,9 +65,9 @@ public class ProfileRepository {
                 user = profileConnection.get(key);
         } catch(SocketException exception) {
             exception.printStackTrace();
+        } finally {
+            connectionPool.releaseConnection(profileConnection);
         }
-        
-        connectionPool.releaseConnection(profileConnection);
         
         return user;
     }

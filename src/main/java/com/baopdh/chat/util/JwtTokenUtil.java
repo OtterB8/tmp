@@ -1,5 +1,6 @@
 package com.baopdh.chat.util;
 
+import com.baopdh.chat.model.CustomPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -18,6 +19,10 @@ public class JwtTokenUtil {
     @Value("${jwt.secret}")
     private String secret;
 
+    public int getIdFromToken(String token) {
+        return Integer.valueOf(getClaimFromToken(token, Claims::getId));
+    }
+    
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
@@ -36,9 +41,10 @@ public class JwtTokenUtil {
     }
 
     public String generateToken(Authentication authentication) {
-        UserDetails user = (UserDetails) authentication.getPrincipal();
+        CustomPrincipal user = (CustomPrincipal) authentication.getPrincipal();
 
         return Jwts.builder()
+                .setId(String.valueOf(user.getId()))
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
