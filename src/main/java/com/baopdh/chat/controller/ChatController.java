@@ -65,6 +65,8 @@ public class ChatController {
     @MessageMapping("/chatting")
     public void handleMessage(ChatMessageRequest chatMessage, Principal principal) {
 //        CustomPrincipal customPrincipal = (CustomPrincipal)((Authentication)principal).getPrincipal();
+        // check if sender id is valid here
+
         int lockIndex = getLockIndex(chatMessage.getRoomId());
         lock[lockIndex].lock();
         try {
