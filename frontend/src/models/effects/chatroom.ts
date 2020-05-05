@@ -1,10 +1,34 @@
 import {disconnect} from '@/utils/websocket';
-import { actionReceiveMessage } from '../actions/chat';
-import { actionUpdateRequest } from '../actions/chatlist';
-import { actionUpdateUserStatusRequest, actionAddNewUser } from '../actions/users';
+import {
+    actionReceiveMessage,
+    actionReset as actionResetChat
+} from '../actions/chat';
+import {
+    actionUpdateRequest,
+    actionReset as actionResetChatlist
+} from '../actions/chatlist';
+import {
+    actionUpdateUserStatusRequest,
+    actionAddNewUser,
+    actionReset as actionResetUsers
+} from '../actions/users';
+import {
+    actionReset as actionResetAuth
+} from '../actions/auth';
+import {
+    actionReset as actionResetChatroom
+} from '../actions/chatroom';
 import {TYPE_MESSAGE, TYPE_ERROR, TYPE_USER_STATUS, TYPE_NEW_USER} from '@/constants/messageType';
 import {getRoomId} from '@/models/selectors/chat';
 import {getAnotherUser} from '@/utils/chatroom';
+
+export const resetState = function *(action: any, {put}: {put: Function}) {
+    yield put(actionResetAuth());
+    yield put(actionResetUsers());
+    yield put(actionResetChat());
+    yield put(actionResetChatlist());
+    yield put(actionResetChatroom());
+}
 
 export const disconnectSocket = function *() {
     try {
@@ -37,6 +61,7 @@ export const processMessage = function *({payload}: any, {call, put, select}: {c
         case TYPE_NEW_USER:
             yield put(actionAddNewUser(data.user));
         case TYPE_ERROR:
+            console.log('zz websocket error')
             break;
     }
 }

@@ -1,4 +1,8 @@
 
+export const actionReset = () => ({
+    type: 'auth/reset'
+});
+
 export const actionAuthRequest = () => ({
     type: 'auth/authRequest'
 });

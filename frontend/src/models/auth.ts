@@ -30,6 +30,7 @@ export interface AuthModelType {
         signoutRequest: [Effect, {type: string}]
     };
     reducers: {
+        reset: Reducer<AuthModelState>,
         authSuccess: Reducer<AuthModelState>,
         authFail: Reducer<AuthModelState>,
         signinSuccess: Reducer<AuthModelState>,
@@ -56,6 +57,13 @@ const AuthModel: AuthModelType = {
         signoutRequest: [signoutRequest, {type: 'takeLatest'}],
     },
     reducers: {
+        reset() {
+            return {
+                info: null,
+                login: {result: false},
+                logout: {result: false}
+            }
+        },
         authSuccess(state, {payload}) {
             return {
                 info: {

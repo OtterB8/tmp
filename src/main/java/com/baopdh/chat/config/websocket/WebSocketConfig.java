@@ -63,38 +63,38 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer, Applic
     
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-      registration.interceptors(new ChannelInterceptorAdapter() {
-        @Override
-        public Message<?> preSend(Message<?> message, MessageChannel channel) {
+        registration.interceptors(new ChannelInterceptorAdapter() {
+            @Override
+            public Message<?> preSend(Message<?> message, MessageChannel channel) {
 
-            StompHeaderAccessor accessor =
-                MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+                StompHeaderAccessor accessor =
+                    MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
-            if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand()) && accessor.getNativeHeader("Authorization") != null) {
-                String jwt = getJwtFromMessage(accessor);
-                
-                if (StringUtils.hasText(jwt) && jwtTokenUtil.validateToken(jwt)) {
-                    int id = jwtTokenUtil.getIdFromToken(jwt);
-                    try {
-                        CustomPrincipal customPrincipal = new CustomPrincipal(User.withUsername(String.valueOf(id))
-                                .password("")
-                                .roles("USER")
-                                .build());
-                        customPrincipal.setId(id);
+                if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand()) && accessor.getNativeHeader("Authorization") != null) {
+                    String jwt = getJwtFromMessage(accessor);
 
-                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(customPrincipal, null, customPrincipal.getAuthorities());
-                        
-                        accessor.setUser(authentication);
-                        
-                        onlineUsers.addUser(id);
-                        messagingTemplate.convertAndSend("/topic/userstatus", new UserStatusResponseBody(id, true));
-                    } catch (UsernameNotFoundException e) {} //ignore exception
+                    if (StringUtils.hasText(jwt) && jwtTokenUtil.validateToken(jwt)) {
+                        int id = jwtTokenUtil.getIdFromToken(jwt);
+                        try {
+                            CustomPrincipal customPrincipal = new CustomPrincipal(User.withUsername(String.valueOf(id))
+                                    .password("")
+                                    .roles("USER")
+                                    .build());
+                            customPrincipal.setId(id);
+
+                            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(customPrincipal, null, customPrincipal.getAuthorities());
+
+                            accessor.setUser(authentication);
+
+                            onlineUsers.addUser(id);
+                            messagingTemplate.convertAndSend("/topic/userstatus", new UserStatusResponseBody(id, true));
+                        } catch (UsernameNotFoundException e) {} //ignore exception
+                    }
                 }
-            }
 
-            return message;
-          }
-      });
+                return message;
+              }
+          });
     }
     
     @Override

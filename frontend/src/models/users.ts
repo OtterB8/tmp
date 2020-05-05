@@ -24,6 +24,7 @@ export interface UsersModelType {
         updateUserStatusRequest: [Effect, {type: string}],
     };
     reducers: {
+        reset: Reducer<UsersModelState>,
         getUsersSuccess: Reducer<UsersModelState>,
         getUsersFail: Reducer<UsersModelState>,
         updateUserStatusSuccess: Reducer<UsersModelState>,
@@ -43,6 +44,13 @@ const UsersModel: UsersModelType = {
         updateUserStatusRequest: [updateUserStatusRequest, {type: 'takeLatest'}]
     },
     reducers: {
+        reset() {
+            return {
+                user: [],
+                list: [],
+                get: {failed: false}
+            };
+        },
         getUsersSuccess(state, {payload}) {
             return {
                 user: payload.user,

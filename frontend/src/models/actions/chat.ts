@@ -1,4 +1,8 @@
 
+export const actionReset = () => ({
+    type: 'chat/reset'
+});
+
 export const actionGetMessagesRequest = (payload: any) => ({
     type: 'chat/getMessagesRequest',
     payload

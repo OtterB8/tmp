@@ -15,7 +15,8 @@ export const getBoxesRequest = function *(action: any, {call, put, select}: {cal
     try {
         const res = yield call(chatService.getChatList);
         if (res.status === 200) {
-            sortChatBoxes(res.data, 0, res.data.list.length - 1);
+            if (res.data.list.length > 0)
+                sortChatBoxes(res.data, 0, res.data.list.length - 1);
             yield put(actionGetBoxesSuccess(res.data));
         } else {
             yield put(actionGetBoxesFail());

@@ -25,6 +25,7 @@ export interface ChatModelType {
         sendMessage: [Effect, {type: string}]
     };
     reducers: {
+        reset: Reducer<ChatModelState>,
         getMessagesStatus: Reducer<ChatModelState>,
         setPartner: Reducer<ChatModelState>,
         getMessagesSuccess: Reducer<ChatModelState>,
@@ -46,6 +47,14 @@ const ChatModel: ChatModelType = {
         sendMessage: [sendMessageRequest, {type: 'takeLatest'}]
     },
     reducers: {
+        reset() {
+            return {
+                messages: [],
+                status: CHAT_STATUS.VOID,
+                partnerId: null,
+                roomId: null
+            }
+        },
         getMessagesStatus(state, {payload}) {
             return {
                 messages: state ? state.messages : [],

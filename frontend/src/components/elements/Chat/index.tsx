@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import './index.less';
 import '@/assets/style/text.less';
 import {connect, ChatModelState, MessageType, AuthModelState, UsersModelState} from 'umi';
@@ -8,6 +8,13 @@ import { actionSendMessage } from '@/models/actions/chat';
 
 const Chat = ({messages, status, partnerId, sendMessage, authId, users}: any) => {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    const chatFrame = document.getElementById('chat-frame');
+    if (chatFrame) {
+      chatFrame.scrollTop = chatFrame.scrollHeight;
+    }
+  });
 
   const onFinish = (values: any) => {
     sendMessage(values.message);
@@ -32,7 +39,7 @@ const Chat = ({messages, status, partnerId, sendMessage, authId, users}: any) =>
           </div>
         </div>
       </div>
-      <div className='messages'>
+      <div className='messages' id='chat-frame'>
         {messages.map((message: MessageType) => {
           return <Message key={message.id} text={message.text}
             className={message.sender === authId ? 'owner' : ''}/>})}

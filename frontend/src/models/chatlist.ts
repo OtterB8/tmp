@@ -22,9 +22,10 @@ export interface RoomModelType {
     state: RoomModelState;
     effects: {
         getBoxesRequest: [Effect, {type: string}],
-        updateRequest: [Effect, {type: string}],
+        updateRequest: [Effect, {type: string}]
     };
     reducers: {
+        reset: Reducer<RoomModelState>,
         updateSuccess: Reducer<RoomModelState>,
         getBoxesSuccess: Reducer<RoomModelState>,
         getBoxesFail: Reducer<RoomModelState>,
@@ -43,6 +44,13 @@ const RoomModel: RoomModelType = {
         updateRequest: [updateRequest, {type: 'takeLatest'}]
     },
     reducers: {
+        reset() {
+            return {
+                room: {},
+                list: [],
+                get: {failed: false}
+            }
+        },
         getBoxesSuccess(state, {payload}) {
             return {
                 room: payload.room,
@@ -51,6 +59,7 @@ const RoomModel: RoomModelType = {
             }
         },
         getBoxesFail(state) {
+            console.log('zz get failed ne')
             return {
                 room: state ? state.room : {},
                 list: state ? state.list : [],

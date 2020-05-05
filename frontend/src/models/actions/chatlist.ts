@@ -1,4 +1,8 @@
 
+export const actionReset = () => ({
+    type: 'chatlist/reset'
+});
+
 export const actionGetBoxesRequest = () => ({
     type: 'chatlist/getBoxesRequest'
 });

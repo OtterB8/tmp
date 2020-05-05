@@ -6,7 +6,7 @@ import { getToken } from '@/utils/token';
 let socket = null;
 let stompClient: Stomp = null;
 
-export const connectToServer = (onReceived: Function) => {
+export const connectToServer = (onReceived: Function, onError: Function) => {
     if (stompClient != null)
         stompClient.disconnect();
 
@@ -20,7 +20,7 @@ export const connectToServer = (onReceived: Function) => {
         stompClient.subscribe('/topic/userstatus', onReceived);
         stompClient.subscribe('/topic/newuser', onReceived);
         stompClient.subscribe('/user/queue/message', onReceived);
-    }, onReceived);
+    }, onError);
 }
 
 export const disconnect = () => {

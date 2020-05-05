@@ -1,5 +1,9 @@
 import {UserInfo} from 'umi';
 
+export const actionReset = () => ({
+    type: 'users/reset'
+});
+
 export const actionGetUsersRequest = () => ({
     type: 'users/getUsersRequest'
 });
@@ -19,7 +23,7 @@ export const actionUpdateUserStatusRequest = (payload: {id: number, online: bool
 });
 
 export const actionUpdateUserStatusSuccess = (payload: UserInfo[]) => ({
-    type: 'users/updateUserStatusSuccess',
+    type: 'updateUserStatusSuccess',
     payload
 });
 

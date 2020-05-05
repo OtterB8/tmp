@@ -14,16 +14,15 @@ export const getAnotherUser = (user1: number, roomId: string) => {
 
 export const moveFirst = (list: string[], element: string) => {
     const index = list.indexOf(element);
-    if (index > -1) {
+    if (index > 0) {
         list.splice(index, 1);
+        list.unshift(element);
     }
-    list.unshift(element);
     return list;
 }
 
 export const sortChatBoxes = ({room, list}: {room: {[id: string]: RoomInfo}, list: string[]},
                                 l: number, r: number) => {
-                                    console.log('zz sort ne');
     let i = l, j = r, pivot = room[list[(l + r) >> 1]].timeStamp;
     while (i <= j) {
         while (room[list[i]].timeStamp > pivot) ++i;

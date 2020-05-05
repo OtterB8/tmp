@@ -5,7 +5,8 @@ import {
     actionSignoutSuccess, actionSignoutFail
 } from '../actions/auth';
 import {
-    actionDisconnect
+    actionDisconnect,
+    actionResetState
 } from '../actions/chatroom';
 import {getAuthStatus} from '@/models/selectors/auth';
 
@@ -37,7 +38,8 @@ export const signinRequest = function *(action: any, {call, put}: {call: Functio
 }
 
 export const signoutRequest = function *(action: any, {call, put}: {call: Function, put: Function}) {
-    yield put (actionDisconnect());
+    yield put(actionDisconnect());
+    yield put(actionResetState());
     yield put(actionSignoutSuccess());
 }
 
